@@ -12,7 +12,8 @@ from srum_parser.console_scripts import argument_parser
 ERROR_FONT = styles.Font(color=styles.colors.RED)
 
 
-def export_xlsx(ctx, input, output, omit_processed, only_processed):
+# module 'srum_parser.srum_parse' has no attribute 'SRUMParse'
+def export_xlsx(input, output, omit_processed, only_processed):
     "Parse and exportsrum_parse.SRUM data from the --input providedese_utils.ESE database file " \
     "to an .xlsx file in the --output directory, optionally including thesrum_parse.SRUM " \
     "entries found in the registry in the folder provided by --include-registry."
@@ -22,12 +23,11 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
     out_workbook = Workbook()
 
     if not only_processed:
-        parser = srum_parse.SRUMParse.SRUMParser(source_file)
+        parser = srum_parse.SRUMParser(source_file)
 
         for table in parser.raw_tables:
             print("Converting table", table.name)
-            sheet_name = srum_parse.SRUMParse.short_table_name(
-                table.name, False)
+            sheet_name = srum_parse.short_table_name(table.name, False)
             worksheet = out_workbook.create_sheet(sheet_name)
 
             worksheet.append(["Full Table Name:", table.name])
@@ -49,7 +49,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                     raise
 
     if not omit_processed:
-        parser = srum_parse.SRUMParse.SRUMParser(source_file)
+        parser = srum_parse.SRUMParser(source_file)
 
         SruDbIdMapTable = [
             table for table in parser.raw_tables
@@ -70,7 +70,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                 value = row[2].decode("utf-16")
             elif value_type == 3:  # Windows SID
                 try:
-                    value = srum_parse.SRUMParse.SID_bytes_to_string(row[2])
+                    value = srum_parse.SID_bytes_to_string(row[2])
                 except Exception as e:
                     print(row)
                     raise e
@@ -85,7 +85,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
         # -------- PARSING TABLES --------
         # --------------------------------
 
-        parser = srum_parse.SRUMParse.SRUMParser(source_file)
+        parser = srum_parse.SRUMParser(source_file)
 
         for table in parser.raw_tables:
 
@@ -100,7 +100,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
             ]:  # Is this table handled?
                 column_names = []
                 worksheet = out_workbook.create_sheet(
-                    srum_parse.SRUMParse.short_table_name(table.name, True))
+                    srum_parse.short_table_name(table.name, True))
                 worksheet.append(["Original Table Name:", table.name])
                 # Setup
 
@@ -194,7 +194,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
 
                     # --- Network Usage Data Monitor {973F5D5C-1D90-4944-BE8E-24B94231A174} ---
                     if table.name == "{973F5D5C-1D90-4944-BE8E-24B94231A174}":
-                        luid_parsed = srum_parse.SRUMParse.parse_interface_luid(
+                        luid_parsed = srum_parse.parse_interface_luid(
                             parser.row_element_by_column_name(
                                 raw_row, "InterfaceLuid", table))
                         for insert in column_inserts:
@@ -261,7 +261,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                                     value)
                     # --- Network Connectivity Usage Monitor {DD6636C4-8929-4683-974E-22C046A43763} ---
                     elif table.name == "{DD6636C4-8929-4683-974E-22C046A43763}":
-                        luid_parsed = srum_parse.SRUMParse.parse_interface_luid(
+                        luid_parsed = srum_parse.parse_interface_luid(
                             parser.row_element_by_column_name(
                                 raw_row, "InterfaceLuid", table))
                         for insert in column_inserts:
@@ -284,7 +284,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                                     parser.row_element_by_column_name(
                                         row, "ConnectedTime", table))
                             elif insert[1] == "P_ConnectStartTime":
-                                value = ese_utils.ESEUtils.parse_filetime(
+                                value = ese_utils.parse_filetime(
                                     parser.row_element_by_column_name(
                                         row, "ConnectStartTime", table))
                             else:
@@ -311,7 +311,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                                     parser.row_element_by_column_name(
                                         row, "PayloadSize", table))
                             elif insert[1] == "P_NotificationType":
-                                value = srum_parse.SRUMColumns.parse_notification_type(
+                                value = srum_columns.SRUMColumns.parse_notification_type(
                                     parser.row_element_by_column_name(
                                         row, "NotificationType", table))
                             else:
@@ -334,7 +334,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                                         row, "UserId", table)]
                                 #value = parser.row_element_by_column_name(row, "UserId", table)
                             elif insert[1] == "P_EndTime":
-                                value = ese_utils.ESEUtils.parse_filetime(
+                                value = ese_utils.parse_filetime(
                                     parser.row_element_by_column_name(
                                         row, "EndTime", table))
                             elif insert[1] == "P_DurationMS":
@@ -373,7 +373,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                                         row, "UserId", table)]
                                 #value = parser.row_element_by_column_name(row, "UserId", table)
                             elif insert[1] == "P_EventTimestamp":
-                                value = ese_utils.ESEUtils.parse_filetime(
+                                value = ese_utils.parse_filetime(
                                     parser.row_element_by_column_name(
                                         row, "EventTimestamp", table))
                             out_dict[insert[
@@ -394,7 +394,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                                         row, "UserId", table)]
                                 #value = parser.row_element_by_column_name(row, "UserId", table)
                             elif insert[1] == "P_EventTimestamp":
-                                value = ese_utils.ESEUtils.parse_filetime(
+                                value = ese_utils.parse_filetime(
                                     parser.row_element_by_column_name(
                                         row, "EventTimestamp", table))
                             out_dict[insert[
@@ -415,7 +415,7 @@ def export_xlsx(ctx, input, output, omit_processed, only_processed):
                                         row, "UserId", table)]
                                 #value = parser.row_element_by_column_name(row, "UserId", table)
                             elif insert[1] == "P_ActiveAcTime":
-                                value = ese_utils.ESEUtils.parse_filetime(
+                                value = ese_utils.parse_filetime(
                                     parser.row_element_by_column_name(
                                         row, "ActiveAcTime", table))
                                 value = xlsx_out_utils.XLSXOutUtils.num_secs_display(
