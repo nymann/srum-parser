@@ -3,7 +3,7 @@ from argparse import ArgumentParser, Namespace
 
 def default() -> Namespace:
     parser = ArgumentParser()
-    parser.add_argument("files", nargs='*', dest="files", default=[])
+    parser.add_argument("files", nargs='*', default=[])
     parser.add_argument("--only-processed",
                         "-P",
                         dest="only_processed",

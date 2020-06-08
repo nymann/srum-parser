@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="srum_parser",
-    version="0.1.0",
+    version="0.1.1",
     author="Patrick Beart, Kristian Nymann Jakobsen",
     author_email="unknown, kristian@nymann.dev",
     description="A tool to assist with parsing the SRUDB.dat ESE database",
@@ -13,7 +13,9 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        'console_scripts': ['parse-srum = srum_parser.console_scripts:main',]
+        "console_scripts": ["parse-srum = srum_parser.console_scripts:main",]
     },
     include_package_data=False,
-    install_requires=['CppHeaderParser', 'libesedb-python', 'pytest'])
+    install_requires=[
+        "CppHeaderParser", "libesedb-python", "pytest", "openpyxl"
+    ])

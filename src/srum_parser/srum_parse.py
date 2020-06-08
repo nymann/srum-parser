@@ -1,8 +1,8 @@
 """Module for interacting with ESE databases"""
 
 import pyesedb
-import ESEUtils
-import parseHeaderDefines
+from srum_parser import ese_utils
+from srum_parser import parse_header_defines
 import struct
 
 
@@ -36,7 +36,8 @@ def SID_bytes_to_string(sid_bytes):
 def parse_interface_luid(luid_bytes):
     # https://docs.microsoft.com/en-gb/windows/win32/api/ifdef/ns-ifdef-net_luid_lh
 
-    iftypes_hfile = parseHeaderDefines.HeaderFile("headers\\ipifcons.h")
+    iftypes_hfile = parse_header_defines.parseHeaderDefines.HeaderFile(
+        "headers\\ipifcons.h")
 
     reserved = luid_bytes[:3]
     netluid_index = luid_bytes[3:6]
@@ -99,7 +100,8 @@ class SRUMParser:
             value_type = record.get_column_type(column_index)
             raw_value = record.get_value_data(column_index)
 
-            out_list.append(ESEUtils.parse_ese_value(raw_value, value_type))
+            out_list.append(
+                ese_utils.ESEUtils.parse_ese_value(raw_value, value_type))
 
         return out_list
 
